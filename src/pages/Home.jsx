@@ -12,9 +12,9 @@ const QUERIDINHOS = [
 
 const PILARES = [
   {
-    titulo: 'Uma casa, não uma loja',
+    titulo: 'Mais do que uma loja, uma casa',
     texto:
-      'Funcionamos em uma casa de família no Cambuí, com deck coberto por uma trepadeira de jasmim. Cachorro é bem-vindo no jardim.'
+      'Nossa casa fica no Cambuí, com deck coberto por uma trepadeira de jasmim. Cachorro é bem-vindo no jardim. Estacionamento com serviço de manobrista.'
   },
   {
     titulo: 'Feito à mão, todo dia',
