@@ -42,6 +42,7 @@ alter table pedidos enable row level security;
 alter table disponibilidade enable row level security;
 
 drop policy if exists "visitante cria pedido" on pedidos;
+drop policy if exists "qualquer um cria pedido" on pedidos;
 drop policy if exists "equipe le pedidos" on pedidos;
 drop policy if exists "equipe atualiza pedidos" on pedidos;
 drop policy if exists "visitante le disponibilidade" on disponibilidade;
@@ -49,8 +50,13 @@ drop policy if exists "equipe escreve disponibilidade" on disponibilidade;
 
 -- Quem visita o site pode CRIAR pedido, e so isso. Nao pode ler pedido
 -- nenhum, nem o proprio: os dados dos clientes ficam fechados.
-create policy "visitante cria pedido"
-  on pedidos for insert to anon
+--
+-- Vale para anon E authenticated de proposito: a equipe logada no painel
+-- tambem precisa conseguir fazer um pedido pelo site, no mesmo navegador.
+-- Sem authenticated aqui, o pedido some silenciosamente quando quem testa
+-- esta logado.
+create policy "qualquer um cria pedido"
+  on pedidos for insert to anon, authenticated
   with check (
     status = 'pendente'
     and motivo_recusa is null
@@ -72,10 +78,3 @@ create policy "equipe atualiza pedidos"
 create policy "equipe escreve disponibilidade"
   on disponibilidade for all to authenticated using (true) with check (true);
 
--- ---------------------------------------------------------------
--- Depois de rodar isto:
--- 1. Authentication, Users, Add user: crie o login da equipe da Nebline
---    com "Auto Confirm User" marcado.
--- 2. Authentication, Providers, Email: desligue "Enable sign ups", senao
---    qualquer pessoa cria conta e entra no painel.
--- ---------------------------------------------------------------

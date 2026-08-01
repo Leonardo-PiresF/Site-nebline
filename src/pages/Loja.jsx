@@ -21,6 +21,7 @@ export default function Loja() {
   const [enviando, setEnviando] = useState(false)
   const [ultimoPedido, setUltimoPedido] = useState(null)
   const [ultimaEncomenda, setUltimaEncomenda] = useState(null)
+  const [falhaGravacao, setFalhaGravacao] = useState(false)
 
   useEffect(() => {
     listarIndisponiveis().then(setIndisponiveis).catch(() => setIndisponiveis([]))
@@ -64,8 +65,14 @@ export default function Loja() {
         setItens([])
       }
       setEnviando(false)
-      // Gravacao em segundo plano. Se o banco falhar, o pedido ja esta no WhatsApp.
-      criarPedido(pedido).catch((e) => console.error('Falha ao gravar o pedido', e))
+      // Gravacao em segundo plano. Se o banco falhar, o pedido ja esta no
+      // WhatsApp, entao nada se perde, mas ele nao aparece no painel. Avisamos
+      // para que ninguem descubra isso so na hora do balcao.
+      setFalhaGravacao(false)
+      criarPedido(pedido).catch((e) => {
+        console.error('Falha ao gravar o pedido', e)
+        setFalhaGravacao(true)
+      })
     }
   }
 
@@ -126,6 +133,7 @@ export default function Loja() {
                 ultimoPedido={ultimoPedido}
                 onNovoPedido={() => setUltimoPedido(null)}
                 onVerCardapio={() => setSecao('cardapio')}
+                falhaGravacao={falhaGravacao}
               />
             </div>
           )}
@@ -136,7 +144,7 @@ export default function Loja() {
 
       <footer className="rodape">
         <div>{LOJA.endereco}</div>
-        <div>Pedidos e encomendas pelo Site ou pelo WhatsApp, pagamento em Pix</div>
+        <div>Pedidos e encomendas pelo WhatsApp, pagamento em Pix</div>
       </footer>
     </>
   )

@@ -14,7 +14,7 @@ const vazio = {
   observacoes: ''
 }
 
-export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ultimoPedido, onNovoPedido, onVerCardapio }) {
+export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ultimoPedido, onNovoPedido, onVerCardapio, falhaGravacao }) {
   const [f, setF] = useState(vazio)
   const [erro, setErro] = useState('')
 
@@ -40,6 +40,12 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
           A mensagem abriu no WhatsApp da Nebline. Toque em enviar por lá para a
           equipe receber, e aguarde a confirmação com a chave Pix.
         </p>
+        {falhaGravacao && (
+          <p className="aviso" style={{ color: 'var(--carimbo)' }}>
+            O pedido não pôde ser registrado no painel da loja, mas a mensagem do WhatsApp está
+            correta. Confirme com a equipe pelo WhatsApp.
+          </p>
+        )}
         <button className="botao botao-linha" onClick={onNovoPedido}>
           Fazer outro pedido
         </button>
