@@ -14,7 +14,7 @@ const PILARES = [
   {
     titulo: 'Mais do que uma loja, uma casa',
     texto:
-      'Nossa casa fica no Cambuí, com deck coberto por uma trepadeira de jasmim. Cachorro é bem-vindo no jardim. Estacionamento com serviço de manobrista.'
+      'Nossa casa fica no Cambuí, com deck coberto. Cachorro é bem-vindo no jardim. Estacionamento com serviço de manobrista.'
   },
   {
     titulo: 'Feito à mão, todo dia',
