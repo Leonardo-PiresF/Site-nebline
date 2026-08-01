@@ -6,7 +6,7 @@ export const LOJA = {
   assinatura: 'Handmade sweets and more',
   endereco: 'Rua Conceição, 942, Cambuí, Campinas/SP',
   // Numero que RECEBE os pedidos, formato internacional, so digitos.
-  whatsappLoja: '5519993550407',
+  whatsappLoja: '5575988472549',
   // Chave Pix exibida no checkout e na mensagem do pedido.
   pix: {
     chave: '35.912.174/0001-05',
