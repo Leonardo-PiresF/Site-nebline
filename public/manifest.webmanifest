@@ -1,0 +1,12 @@
+{
+  "name": "Nebline Confeitaria",
+  "short_name": "Nebline",
+  "description": "Peça doces, cafés e encomendas da Nebline Confeitaria, no Cambuí.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#fbfaf7",
+  "icons": [
+    { "src": "/logo-nebline.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }
+  ]
+}

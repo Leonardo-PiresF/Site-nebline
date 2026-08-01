@@ -1,0 +1,787 @@
+/* ---------------------------------------------------------------
+   Nebline, sistema visual
+   Vernaculo: cardapio em monoespaçada + logotipo serifado de alto
+   contraste. O carrinho e o painel sao comandas impressas.
+   --------------------------------------------------------------- */
+
+:root {
+  --tinta: #16150f;
+  --tinta-70: #4a4941;
+  --tinta-40: #8b8a80;
+  --papel: #fbfaf7;
+  --comanda: #efede6;
+  --linha: #d9d5c9;
+  --jasmim: #2c3b32;
+  --neblina: #8c948e;
+  --carimbo: #a32c22;
+
+  --display: 'Cormorant Garamond', Georgia, serif;
+  --corpo: 'Karla', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --borda: 1px solid var(--linha);
+  --raio: 2px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--corpo);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--jasmim);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---------------- Tipografia utilitaria ---------------- */
+
+.rotulo {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tinta-40);
+}
+
+.preco {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------- Cabecalho ---------------- */
+
+.topo {
+  border-bottom: var(--borda);
+  background: var(--papel);
+}
+
+.topo-interno {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 24px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.marca-img {
+  display: block;
+  height: 80px;
+  width: auto;
+}
+
+.marca {
+  font-family: var(--display);
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  line-height: 1;
+  margin: 0;
+  text-indent: 0.26em;
+}
+
+.marca-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--tinta-40);
+  margin-top: 8px;
+  text-indent: 0.34em;
+}
+
+/* ---------------- Navegacao de categorias ---------------- */
+
+.nav-cats {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--papel);
+  border-bottom: var(--borda);
+}
+
+.nav-cats-interno {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-cats-interno::-webkit-scrollbar { display: none; }
+
+.aba {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 14px 12px;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-40);
+}
+.aba[data-ativa='true'] {
+  color: var(--tinta);
+  border-bottom-color: var(--jasmim);
+}
+
+/* ---------------- Estrutura ---------------- */
+
+.palco {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 34px 24px 120px;
+}
+
+.tela-comanda { max-width: 520px; margin: 8px auto 0; }
+
+.secao + .secao { margin-top: 44px; }
+
+.secao-cabeca {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 1px solid var(--tinta);
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+.secao-titulo {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* ---------------- Linha de produto ---------------- */
+
+.itens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+
+.item {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+  gap: 0 16px;
+  padding: 18px 0;
+  border-bottom: 1px dotted var(--linha);
+  align-items: start;
+}
+
+.foto {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  background: var(--comanda);
+}
+
+.foto-vazia {
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-size: 26px;
+  color: var(--tinta-40);
+  aspect-ratio: 1;
+}
+
+.foto-item { aspect-ratio: 1; border-radius: 3px; }
+
+.item-nome {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.item-peso {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--tinta-40);
+  margin-left: 8px;
+  letter-spacing: 0.06em;
+}
+
+.item-desc {
+  font-size: 12.5px;
+  color: var(--tinta-70);
+  margin: 2px 0 0;
+  max-width: 44ch;
+}
+
+.item-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+.tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--neblina);
+  color: var(--jasmim);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.item-lado { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+
+.add {
+  border: 1px solid var(--tinta);
+  background: transparent;
+  border-radius: var(--raio);
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.add:hover { background: var(--tinta); color: var(--papel); }
+
+.item[data-esgotado='true'] { opacity: 0.45; }
+.item[data-esgotado='true'] .add { display: none; }
+
+.selo-esgotado {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--carimbo);
+  border: 1px solid var(--carimbo);
+  padding: 3px 7px;
+  transform: rotate(-3deg);
+}
+
+.item-texto .escolha { margin-top: 10px; display: block; }
+
+.escolha {
+  font-family: var(--mono);
+  font-size: 11px;
+  border: var(--borda);
+  background: var(--papel);
+  padding: 5px 8px;
+  border-radius: var(--raio);
+  max-width: 190px;
+}
+
+/* ---------------- Comanda (assinatura do projeto) ---------------- */
+
+.comanda {
+  background: var(--comanda);
+  padding: 26px 22px 30px;
+  position: relative;
+  box-shadow: 0 1px 0 rgba(22, 21, 15, 0.06), 0 18px 40px -30px rgba(22, 21, 15, 0.5);
+}
+
+/* Serrilhado de papel picotado no topo e na base */
+.comanda::before,
+.comanda::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--comanda) 0 6px,
+    transparent 6px 12px
+  );
+}
+.comanda::before { top: -7px; transform: scaleY(-1); }
+.comanda::after { bottom: -7px; }
+
+.comanda-topo { text-align: center; border-bottom: 1px dashed var(--tinta-40); padding-bottom: 14px; }
+
+.comanda-marca {
+  font-family: var(--display);
+  font-size: 20px;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+}
+
+.comanda-linhas { font-family: var(--mono); font-size: 12px; }
+
+.comanda-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 10px;
+  padding: 10px 0;
+  border-bottom: 1px dotted var(--tinta-40);
+}
+
+.comanda-item-nome { font-size: 12px; line-height: 1.35; }
+.comanda-item-opcao { color: var(--tinta-70); font-size: 11px; }
+
+.qtd { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.qtd button {
+  width: 20px; height: 20px;
+  border: 1px solid var(--tinta-40);
+  background: transparent;
+  line-height: 1;
+  display: grid; place-items: center;
+  font-size: 12px;
+}
+.qtd span { font-variant-numeric: tabular-nums; min-width: 16px; text-align: center; }
+
+.totais { font-family: var(--mono); font-size: 12px; margin-top: 16px; }
+.totais div { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+.totais .total {
+  border-top: 1px solid var(--tinta);
+  margin-top: 8px;
+  padding-top: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.comanda-vazia {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--tinta-70);
+  text-align: center;
+  padding: 28px 10px;
+  line-height: 1.8;
+}
+
+/* ---------------- Formularios ---------------- */
+
+.campo { display: block; margin-top: 14px; }
+.campo > span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinta-70);
+  margin-bottom: 5px;
+}
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  background: var(--papel);
+  border: var(--borda);
+  border-radius: var(--raio);
+  padding: 10px 11px;
+  font-size: 14px;
+}
+.campo textarea { min-height: 74px; resize: vertical; }
+
+.dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.modos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.modo {
+  border: var(--borda);
+  background: transparent;
+  border-radius: var(--raio);
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.modo[data-ativo='true'] { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+
+.botao {
+  width: 100%;
+  margin-top: 18px;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--jasmim);
+  color: #f6f5f0;
+  padding: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: opacity 0.15s ease;
+}
+.botao:hover { opacity: 0.88; }
+.botao:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.botao-linha {
+  background: transparent;
+  border: 1px solid var(--tinta);
+  color: var(--tinta);
+}
+
+.botao-perigo { background: transparent; border: 1px solid var(--carimbo); color: var(--carimbo); }
+
+.aviso {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--tinta-70);
+  margin-top: 12px;
+}
+
+/* ---------------- Encomendas ---------------- */
+
+.encomendas { display: grid; gap: 18px; }
+
+.cartao-enc {
+  border: var(--borda);
+  background: var(--comanda);
+  padding: 20px;
+}
+
+.cartao-enc h3 { font-family: var(--display); font-size: 24px; margin: 0 0 4px; font-weight: 500; }
+
+.tamanhos { display: grid; gap: 8px; margin-top: 14px; }
+.tamanho {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border: var(--borda);
+  background: var(--papel);
+  padding: 10px 12px;
+  border-radius: var(--raio);
+  text-align: left;
+  font-size: 13px;
+}
+.tamanho[data-ativo='true'] { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); }
+
+/* ---------------- Painel administrativo ---------------- */
+
+.admin { max-width: 1120px; margin: 0 auto; padding: 32px 24px 100px; }
+
+.admin-topo { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; border-bottom: 1px solid var(--tinta); padding-bottom: 14px; }
+
+.pedidos { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-top: 24px; }
+
+.pedido {
+  background: var(--comanda);
+  border-top: 3px solid var(--tinta);
+  padding: 18px;
+}
+.pedido[data-status='aceito'] { border-top-color: var(--jasmim); }
+.pedido[data-status='recusado'] { border-top-color: var(--carimbo); opacity: 0.6; }
+.pedido[data-status='concluido'] { border-top-color: var(--neblina); opacity: 0.7; }
+
+.pedido-codigo { font-family: var(--mono); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; }
+
+.status {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1px solid currentColor;
+}
+.status[data-s='pendente'] { color: var(--carimbo); }
+.status[data-s='aceito'] { color: var(--jasmim); }
+.status[data-s='recusado'] { color: var(--tinta-40); }
+.status[data-s='concluido'] { color: var(--tinta-40); }
+
+.pedido-linhas { font-family: var(--mono); font-size: 11.5px; margin: 14px 0; }
+.pedido-linhas div { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+
+.acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.acoes .botao { margin-top: 0; padding: 11px 8px; font-size: 10.5px; }
+
+.estoque { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 4px 28px; margin-top: 18px; }
+.estoque-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px dotted var(--linha);
+  font-size: 13px;
+}
+.chave {
+  border: 1px solid var(--tinta-40);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  white-space: nowrap;
+}
+.chave[data-esgotado='true'] { color: var(--carimbo); border-color: var(--carimbo); }
+
+.vazio {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--tinta-70);
+  border: 1px dashed var(--linha);
+  padding: 40px 20px;
+  text-align: center;
+  line-height: 1.9;
+  margin-top: 24px;
+}
+
+.entrar { max-width: 340px; margin: 14vh auto; text-align: center; }
+
+.faixa-demo {
+  background: var(--tinta);
+  color: var(--papel);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 7px 16px;
+}
+
+/* ---------------- Rodape ---------------- */
+
+.rodape {
+  border-top: var(--borda);
+  padding: 34px 24px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--tinta-40);
+  line-height: 2;
+}
+
+/* ---------------- Home ---------------- */
+
+.marca-botao { background: none; border: 0; padding: 0; text-align: left; display: block; }
+.marca, .marca-sub { display: block; }
+
+.botao-comanda {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  background: transparent;
+  border: 1px solid var(--tinta);
+  border-radius: var(--raio);
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.botao-comanda:hover,
+.botao-comanda[data-ativa='true'] { background: var(--tinta); color: var(--papel); }
+.botao-comanda-valor { font-size: 10px; letter-spacing: 0.06em; text-transform: none; opacity: 0.7; }
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  gap: 48px;
+  align-items: center;
+  padding: 12px 0 44px;
+}
+
+.hero-frase {
+  font-family: var(--display);
+  font-size: clamp(34px, 4.6vw, 58px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  margin: 14px 0 0;
+  max-width: 15ch;
+}
+.hero-frase em { font-style: italic; color: var(--jasmim); }
+
+.hero-linha { max-width: 46ch; margin: 18px 0 0; font-size: 15px; color: var(--tinta-70); }
+
+.hero-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.hero-acoes .botao { margin-top: 0; width: auto; min-width: 190px; text-align: center; text-decoration: none; }
+
+.hero-foto { margin: 0; }
+.hero-foto .foto { aspect-ratio: 4 / 5; border-radius: 3px; }
+.hero-foto figcaption { margin-top: 8px; }
+
+.botao-largo { margin-top: 24px; max-width: 320px; }
+
+.faixa-horarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--linha);
+  border-block: var(--borda);
+  margin: 24px 0 4px;
+}
+.faixa-horarios > div { background: var(--papel); padding: 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+.faixa-horarios strong { font-family: var(--mono); font-size: 14px; font-weight: 500; }
+
+.destaques { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; margin-top: 22px; }
+.destaque h3 { font-family: var(--display); font-size: 20px; font-weight: 500; margin: 12px 0 2px; }
+.destaque p { margin: 0 0 8px; font-size: 12.5px; color: var(--tinta-70); }
+.foto-destaque { aspect-ratio: 1; border-radius: 3px; }
+
+.sobre { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 44px; align-items: start; }
+.sobre-foto { margin: 0; position: sticky; top: 82px; }
+.sobre-foto .foto { aspect-ratio: 3 / 4; border-radius: 3px; }
+.sobre-texto { font-size: 15px; line-height: 1.72; color: var(--tinta-70); max-width: 56ch; margin: 16px 0 0; }
+.sobre-texto:first-of-type { font-size: 17px; color: var(--tinta); }
+
+.pilares { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 36px; margin-top: 32px; }
+.pilar h3 { font-family: var(--display); font-size: 22px; font-weight: 500; margin: 0 0 6px; }
+.pilar p { margin: 0; font-size: 13.5px; color: var(--tinta-70); line-height: 1.65; }
+
+.endereco-grande {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 34px);
+  margin: 18px 0 0;
+  max-width: 20ch;
+}
+
+/* ---------------- Barra de abas do mobile ---------------- */
+
+.barra-app { display: none; }
+
+.selo-qtd {
+  position: absolute;
+  top: -5px;
+  right: -9px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--carimbo);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* ---------------- Responsivo ---------------- */
+
+@media (max-width: 1080px) {
+  .destaques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sobre { grid-template-columns: 1fr; gap: 28px; }
+  .sobre-foto { position: static; }
+  .sobre-foto .foto { aspect-ratio: 16 / 10; }
+}
+
+@media (max-width: 980px) {
+  html { -webkit-text-size-adjust: 100%; }
+  body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; }
+
+  .palco { padding: 18px 18px calc(96px + env(safe-area-inset-bottom)); }
+  .itens { grid-template-columns: 1fr; }
+  .pilares { grid-template-columns: 1fr; gap: 22px; }
+  .faixa-horarios { grid-template-columns: 1fr; }
+  .dupla { grid-template-columns: 1fr; }
+  .tela-comanda { margin-top: 0; }
+
+  /* Cabecalho compacto, como a barra de titulo de um app */
+  .topo { position: sticky; top: 0; z-index: 25; }
+  .topo-interno { padding: 12px 18px; justify-content: center; }
+  .marca-img { height: 52px; }
+  .botao-comanda { display: none; }
+
+  /* As abas de topo viram so os filtros do cardapio */
+  .nav-cats { position: sticky; top: 73px; z-index: 24; }
+  .nav-cats[data-secao='home'],
+  .nav-cats[data-secao='encomendas'],
+  .nav-cats[data-secao='comanda'] { display: none; }
+  .nav-cats-interno { padding: 0 12px; gap: 6px; }
+  .aba-principal { display: none; }
+  .aba {
+    border: 1px solid var(--linha);
+    border-radius: 999px;
+    padding: 8px 14px;
+    margin: 9px 0;
+    font-size: 10.5px;
+  }
+  .aba[data-ativa='true'] { background: var(--tinta); border-color: var(--tinta); color: var(--papel); }
+
+  .comanda { box-shadow: none; background: transparent; padding: 6px 0 20px; }
+  .comanda::before, .comanda::after { display: none; }
+  .comanda-linhas .comanda-item { padding: 14px 0; }
+
+  /* Hero empilha, com a foto primeiro */
+  .hero { grid-template-columns: 1fr; gap: 22px; padding: 6px 0 30px; }
+  .hero-foto { order: -1; }
+  .hero-foto .foto { aspect-ratio: 5 / 4; }
+  .hero-acoes .botao { width: 100%; min-width: 0; }
+
+  .destaques { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .secao-titulo { font-size: 26px; }
+  .item { grid-template-columns: 76px minmax(0, 1fr) auto; gap: 0 14px; }
+
+  /* Alvos de toque maiores */
+  .add { width: 40px; height: 40px; font-size: 19px; border-radius: 999px; }
+  .qtd button { width: 32px; height: 32px; border-radius: 999px; }
+  .campo input, .campo select, .campo textarea {
+    padding: 13px 12px;
+    font-size: 16px; /* abaixo de 16px o iOS da zoom ao focar */
+    border-radius: 10px;
+  }
+  .botao { padding: 16px; border-radius: 10px; }
+  .modo { padding: 13px; border-radius: 10px; }
+  .tamanho { padding: 14px; border-radius: 10px; }
+  .cartao-enc { border-radius: 12px; padding: 18px 16px; }
+
+  .rodape { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+  /* Barra inferior */
+  .barra-app {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--papel) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    border-top: var(--borda);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .barra-app button {
+    background: none;
+    border: 0;
+    padding: 9px 4px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--tinta-40);
+    transition: color 0.15s ease;
+  }
+  .barra-app button[data-ativa='true'] { color: var(--tinta); }
+  .barra-icone { position: relative; display: block; line-height: 0; }
+  .barra-nome { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+}
+
+@media (max-width: 400px) {
+  .barra-nome { font-size: 8.5px; }
+  .destaques { grid-template-columns: 1fr; }
+}
+
+/* ---------------- Comanda como tela propria ---------------- */
+/* Ela deixou de ser barra lateral, entao o papel picotado volta a
+   fazer sentido em largura maior. */
+
+.tela-comanda .comanda { padding: 30px 28px 34px; }
+.tela-comanda .comanda-marca { font-size: 24px; }
+.tela-comanda .comanda-linhas { font-size: 13px; }
+.tela-comanda .comanda-item-nome { font-size: 13.5px; }
+.tela-comanda .totais { font-size: 13px; }
+
+@media (max-width: 980px) {
+  .tela-comanda .comanda { padding: 4px 0 20px; }
+}
+
+.foto-mini { width: 34px; height: 34px; border-radius: 3px; flex: none; }
+.foto-mini.foto-vazia { font-size: 14px; }
