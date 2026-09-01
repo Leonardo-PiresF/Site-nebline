@@ -144,7 +144,7 @@ export default function Loja() {
 
       <footer className="rodape">
         <div>{LOJA.endereco}</div>
-        <div>Pedidos e encomendas pelo WhatsApp, pagamento em Pix</div>
+        <div>Pedidos e encomendas pelo WhatsApp, para retirar na loja, pagamento em Pix</div>
       </footer>
     </>
   )

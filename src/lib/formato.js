@@ -60,18 +60,9 @@ export function mensagemPedido(pedido) {
   L.push(`${pedido.cliente.nome}`)
   L.push(`${pedido.cliente.telefone}`)
 
-  if (pedido.entrega.modo === 'entrega') {
-    L.push('')
-    L.push('*ENTREGA*')
-    L.push(`${pedido.entrega.endereco}`)
-    L.push(`Bairro: ${pedido.entrega.bairro}`)
-    if (pedido.entrega.complemento) L.push(`Complemento: ${pedido.entrega.complemento}`)
-    if (pedido.entrega.referencia) L.push(`Referência: ${pedido.entrega.referencia}`)
-  } else {
-    L.push('')
-    L.push('*RETIRADA NA LOJA*')
-    L.push(LOJA.endereco)
-  }
+  L.push('')
+  L.push('*RETIRADA NA LOJA*')
+  L.push(LOJA.endereco)
 
   if (pedido.tipo === 'encomenda' && pedido.encomenda) {
     const e = pedido.encomenda
@@ -96,15 +87,11 @@ export function mensagemPedido(pedido) {
   })
   L.push(regua('='))
   L.push(linhaValor('Subtotal', brl(pedido.totais.subtotal)))
-  if (pedido.entrega.modo === 'entrega') {
-    L.push(linhaValor(`Entrega ${pedido.entrega.bairro}`, brl(pedido.totais.taxa)))
-  } else {
-    L.push(linhaValor('Retirada na loja', brl(0)))
-  }
+  L.push(linhaValor('Retirada na loja', brl(0)))
   if (pedido.totais.sinal) {
     L.push(linhaValor('TOTAL', brl(pedido.totais.total)))
     L.push(linhaValor(`Sinal ${REGRAS_ENCOMENDA.percentualSinal}% agora`, brl(pedido.totais.sinal)))
-    L.push(linhaValor('Restante na entrega', brl(pedido.totais.total - pedido.totais.sinal)))
+    L.push(linhaValor('Restante na retirada', brl(pedido.totais.total - pedido.totais.sinal)))
   } else {
     L.push(linhaValor('TOTAL', brl(pedido.totais.total)))
   }
@@ -148,11 +135,7 @@ export function mensagemAceite(pedido) {
     L.push(`Total: ${brl(pedido.totais.total)}`)
     L.push(`Chave Pix (${LOJA.pix.tipo}): ${LOJA.pix.chave}`)
     L.push('')
-    L.push(
-      pedido.entrega.modo === 'entrega'
-        ? `Já estamos preparando. Saímos para ${pedido.entrega.bairro} assim que ficar pronto.`
-        : `Já estamos preparando. É só retirar em ${LOJA.endereco}.`
-    )
+    L.push(`Já estamos preparando. É só retirar em ${LOJA.endereco}.`)
   }
   L.push('')
   L.push('Qualquer coisa, é só responder por aqui.')
@@ -172,6 +155,5 @@ export function mensagemRecusa(pedido, motivo) {
 }
 
 export function mensagemPronto(pedido) {
-  const acao = pedido.entrega.modo === 'entrega' ? 'saiu para entrega' : 'está pronto para retirada'
-  return `*${LOJA.nome.toUpperCase()}*\n\nSeu pedido *${pedido.codigo}* ${acao}. Bom apetite!`
+  return `*${LOJA.nome.toUpperCase()}*\n\nSeu pedido *${pedido.codigo}* está pronto para retirada em ${LOJA.endereco}. Bom apetite!`
 }

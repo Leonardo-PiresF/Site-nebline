@@ -1,14 +1,23 @@
 import Foto from '../components/Foto.jsx'
+import { PRODUTOS } from '../data/catalogo.js'
 import { fotoDe, fotoHero, fotoSobre } from '../data/fotos.js'
 import { LOJA } from '../lib/config.js'
 import { brl } from '../lib/formato.js'
 
-const QUERIDINHOS = [
-  { id: 'tor-chocolatuda', cat: 'tortas', nome: 'Torta Chocolatuda', nota: 'A vencedora do programa', preco: 28 },
-  { id: 'tor-banoffee', cat: 'tortas', nome: 'Torta Banoffee', nota: 'A queridinha da casa', preco: 25 },
-  { id: 'doc-vasinho', cat: 'doces', nome: 'Vasinho', nota: 'Pavê belga com flores comestíveis', preco: 32 },
-  { id: 'sal-croissant-ganache', cat: 'salgados', nome: 'Croissant de ganache belga', nota: 'Sai quente à tarde', preco: 23 }
+// So o id, a categoria e a nota ficam aqui. Nome e preco saem do catalogo, para
+// que um reajuste em catalogo.js chegue sozinho na home.
+const DESTAQUES = [
+  { id: 'tor-chocolatuda', cat: 'tortas', nota: 'A vencedora do programa' },
+  { id: 'tor-banoffee', cat: 'tortas', nota: 'A queridinha da casa' },
+  { id: 'doc-vasinho', cat: 'doces', nota: 'Pavê belga com flores comestíveis' },
+  { id: 'sal-croissant-ganache', cat: 'salgados', nota: 'Sai quente à tarde' }
 ]
+
+// Se um id sumir do cardapio, o destaque some da home em vez de quebrar a pagina.
+const QUERIDINHOS = DESTAQUES.map((d) => {
+  const produto = PRODUTOS.find((p) => p.id === d.id)
+  return produto ? { ...d, nome: produto.nome, preco: produto.preco } : null
+}).filter(Boolean)
 
 const PILARES = [
   {
@@ -44,7 +53,8 @@ export default function Home({ onVerCardapio, onEncomendar }) {
           </h2>
           <p className="hero-linha">
             Doces feitos à mão, café, brunch e encomendas com data marcada. Monte seu pedido por
-            aqui e finalize no WhatsApp, sem baixar aplicativo e sem taxa de plataforma.
+            aqui, finalize no WhatsApp e retire na loja, sem baixar aplicativo e sem taxa de
+            plataforma.
           </p>
           <div className="hero-acoes">
             <button className="botao" onClick={onVerCardapio}>
@@ -69,7 +79,7 @@ export default function Home({ onVerCardapio, onEncomendar }) {
         <div className="destaques">
           {QUERIDINHOS.map((q) => (
             <article className="destaque" key={q.id}>
-              <Foto className="foto-destaque" src={fotoDe(q.id, q.cat, 500, 500)} alt={q.nome} inicial={q.nome[0]} />
+              <Foto className="foto-destaque" src={fotoDe(q.id)} alt={q.nome} inicial={q.nome[0]} />
               <h3>{q.nome}</h3>
               <p>{q.nota}</p>
               <span className="preco">{brl(q.preco)}</span>

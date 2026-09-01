@@ -27,7 +27,7 @@ import {
 const MOTIVOS = [
   'A agenda desta data já está fechada. Consigo produzir em outra data próxima.',
   'Este item acabou hoje na vitrine.',
-  'Não entregamos neste endereço no horário pedido.'
+  'Não conseguimos ter o pedido pronto no horário combinado.'
 ]
 
 function Pedido({ pedido, onAceitar, onRecusar, onConcluir }) {
@@ -50,13 +50,7 @@ function Pedido({ pedido, onAceitar, onRecusar, onConcluir }) {
       <div style={{ marginTop: 12, fontSize: 13 }}>
         <strong>{pedido.cliente.nome}</strong>
         <div style={{ fontFamily: 'var(--mono)', fontSize: 12 }}>{pedido.cliente.telefone}</div>
-        <div style={{ fontSize: 12, color: 'var(--tinta-70)', marginTop: 6 }}>
-          {pedido.entrega.modo === 'entrega'
-            ? `${pedido.entrega.endereco}, ${pedido.entrega.bairro}${
-                pedido.entrega.complemento ? `, ${pedido.entrega.complemento}` : ''
-              }`
-            : 'Retirada na loja'}
-        </div>
+        <div style={{ fontSize: 12, color: 'var(--tinta-70)', marginTop: 6 }}>Retirada na loja</div>
       </div>
 
       {pedido.encomenda && (
@@ -147,7 +141,7 @@ function Pedido({ pedido, onAceitar, onRecusar, onConcluir }) {
       {pedido.status === 'aceito' && (
         <div className="acoes">
           <button className="botao botao-linha" onClick={() => onConcluir(pedido)}>
-            {pedido.entrega.modo === 'entrega' ? 'Saiu para entrega' : 'Pronto para retirada'}
+            Pronto para retirada
           </button>
         </div>
       )}
@@ -287,7 +281,7 @@ export default function Admin() {
                         >
                           <Foto
                             className="foto-mini"
-                            src={fotoDe(p.id, p.cat, 80, 80)}
+                            src={fotoDe(p.id)}
                             alt=""
                             inicial={p.nome[0]}
                           />

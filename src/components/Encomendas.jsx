@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ENCOMENDAS } from '../data/catalogo.js'
-import { BAIRROS, RETIRADA } from '../data/entrega.js'
+import { RETIRADA } from '../data/entrega.js'
 import { REGRAS_ENCOMENDA, LOJA } from '../lib/config.js'
 import { brl, gerarCodigo, somenteDigitos } from '../lib/formato.js'
 
@@ -26,11 +26,6 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
     hora: '15:00',
     nome: '',
     telefone: '',
-    modo: 'retirada',
-    bairroId: BAIRROS[0].id,
-    endereco: '',
-    complemento: '',
-    referencia: '',
     observacoes: ''
   })
   const [erro, setErro] = useState('')
@@ -40,9 +35,8 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
   const set = (campo) => (e) => setF({ ...f, [campo]: e.target.value })
 
   const minima = useMemo(() => dataMinima(enc.tipo), [enc.tipo])
-  const bairro = BAIRROS.find((b) => b.id === f.bairroId) || BAIRROS[0]
-  const taxa = f.modo === 'entrega' ? bairro.taxa : 0
-  const total = tamanho.preco + taxa
+  // Encomenda tambem sai so por retirada no balcao, sem taxa.
+  const total = tamanho.preco
   const sinal = Math.round((total * REGRAS_ENCOMENDA.percentualSinal) / 100)
 
   function escolherEncomenda(id) {
@@ -72,13 +66,12 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
   }
 
   function validar() {
-    if (!f.dataDesejada) return 'Escolha a data da retirada ou entrega.'
+    if (!f.dataDesejada) return 'Escolha a data da retirada.'
     if (f.dataDesejada < minima)
       return `Esta encomenda precisa de ${REGRAS_ENCOMENDA.antecedenciaHoras[enc.tipo]} horas de antecedência. A primeira data possível é ${minima.split('-').reverse().join('/')}.`
     if (enc.tipo === 'bolo_festivo' && (!f.massa || !f.recheio)) return 'Escolha a massa e o recheio do bolo.'
     if (f.nome.trim().length < 3) return 'Escreva seu nome completo.'
     if (somenteDigitos(f.telefone).length < 10) return 'Confira o telefone, com DDD.'
-    if (f.modo === 'entrega' && f.endereco.trim().length < 6) return 'Escreva a rua e o número.'
     return ''
   }
 
@@ -102,18 +95,8 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
           qtd: 1
         }
       ],
-      entrega:
-        f.modo === 'entrega'
-          ? {
-              modo: 'entrega',
-              bairro: bairro.nome,
-              prazo: bairro.prazo,
-              endereco: f.endereco.trim(),
-              complemento: f.complemento.trim(),
-              referencia: f.referencia.trim()
-            }
-          : { modo: 'retirada', prazo: RETIRADA.prazo },
-      totais: { subtotal: tamanho.preco, taxa, total, sinal },
+      entrega: { modo: 'retirada', prazo: RETIRADA.prazo },
+      totais: { subtotal: tamanho.preco, taxa: 0, total, sinal },
       pagamento: { forma: 'Pix' },
       encomenda: {
         tipo: enc.tipo,
@@ -214,7 +197,7 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
 
         <div className="dupla">
           <label className="campo">
-            <span>Data</span>
+            <span>Data da retirada</span>
             <input type="date" min={minima} value={f.dataDesejada} onChange={set('dataDesejada')} />
           </label>
           <label className="campo">
@@ -232,14 +215,10 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
           <input value={f.restricoes} onChange={set('restricoes')} placeholder="Sem lactose, sem glúten, alergias" />
         </label>
 
-        <div className="modos">
-          <button className="modo" data-ativo={f.modo === 'retirada'} onClick={() => setF({ ...f, modo: 'retirada' })}>
-            Retirar na loja
-          </button>
-          <button className="modo" data-ativo={f.modo === 'entrega'} onClick={() => setF({ ...f, modo: 'entrega' })}>
-            Entrega
-          </button>
-        </div>
+        <p className="aviso">
+          A encomenda fica reservada para <strong>retirada na loja</strong>, em {LOJA.endereco}, na
+          data e no horário escolhidos acima.
+        </p>
 
         <div className="dupla">
           <label className="campo">
@@ -252,37 +231,6 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
           </label>
         </div>
 
-        {f.modo === 'entrega' && (
-          <>
-            <div className="dupla">
-              <label className="campo">
-                <span>Bairro</span>
-                <select value={f.bairroId} onChange={set('bairroId')}>
-                  {BAIRROS.map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {b.nome}, {brl(b.taxa)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="campo">
-                <span>Rua e número</span>
-                <input value={f.endereco} onChange={set('endereco')} placeholder="Rua Conceição, 942" />
-              </label>
-            </div>
-            <div className="dupla">
-              <label className="campo">
-                <span>Complemento</span>
-                <input value={f.complemento} onChange={set('complemento')} />
-              </label>
-              <label className="campo">
-                <span>Referência</span>
-                <input value={f.referencia} onChange={set('referencia')} />
-              </label>
-            </div>
-          </>
-        )}
-
         <label className="campo">
           <span>Observações</span>
           <textarea value={f.observacoes} onChange={set('observacoes')} placeholder="Qualquer detalhe que ajude a produção" />
@@ -294,8 +242,8 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
             <span>{brl(tamanho.preco)}</span>
           </div>
           <div>
-            <span>{f.modo === 'entrega' ? `Entrega ${bairro.nome}` : 'Retirada na loja'}</span>
-            <span>{brl(taxa)}</span>
+            <span>Retirada na loja</span>
+            <span>{brl(0)}</span>
           </div>
           <div className="total">
             <span>Total</span>

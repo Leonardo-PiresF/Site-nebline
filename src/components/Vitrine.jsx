@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Foto from './Foto.jsx'
-import { fotoDe } from '../data/fotos.js'
+import { fotoDe, temFotoReal } from '../data/fotos.js'
 import { brl } from '../lib/formato.js'
 
 function Linha({ produto, esgotado, onAdicionar }) {
@@ -10,7 +10,7 @@ function Linha({ produto, esgotado, onAdicionar }) {
     <article className="item" data-esgotado={esgotado}>
       <Foto
         className="foto-item"
-        src={fotoDe(produto.id, produto.cat)}
+        src={fotoDe(produto.id)}
         alt={produto.nome}
         inicial={produto.nome[0]}
       />
@@ -71,7 +71,9 @@ export default function Vitrine({ categoria, produtos, indisponiveis, onAdiciona
         <h2 className="secao-titulo">{categoria.nome}</h2>
         <span className="rotulo">{categoria.linha}</span>
       </div>
-      <p className="aviso">Fotos ilustrativas, ainda não são os doces da casa.</p>
+      {produtos.some((p) => !temFotoReal(p.id)) && (
+        <p className="aviso">Alguns itens ainda não têm foto.</p>
+      )}
       <div className="itens">
         {produtos.map((p) => (
           <Linha

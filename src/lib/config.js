@@ -17,9 +17,7 @@ export const LOJA = {
     ['Domingo', '08h às 18h'],
     ['Segunda', '11h às 18h'],
     ['Terça a sábado', '08h às 19h']
-  ],
-  // Pedido minimo para entrega, em reais. Use 0 para desativar.
-  pedidoMinimoEntrega: 30
+  ]
 }
 
 export const REGRAS_ENCOMENDA = {

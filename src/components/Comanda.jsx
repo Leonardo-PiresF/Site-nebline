@@ -1,16 +1,11 @@
 import { useMemo, useState } from 'react'
-import { BAIRROS, RETIRADA } from '../data/entrega.js'
+import { RETIRADA } from '../data/entrega.js'
 import { LOJA } from '../lib/config.js'
 import { brl, gerarCodigo, somenteDigitos } from '../lib/formato.js'
 
 const vazio = {
   nome: '',
   telefone: '',
-  modo: 'entrega',
-  bairroId: BAIRROS[0].id,
-  endereco: '',
-  complemento: '',
-  referencia: '',
   observacoes: ''
 }
 
@@ -20,11 +15,8 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
 
   const set = (campo) => (e) => setF({ ...f, [campo]: e.target.value })
 
-  const bairro = BAIRROS.find((b) => b.id === f.bairroId) || BAIRROS[0]
-  const subtotal = useMemo(() => itens.reduce((s, i) => s + i.preco * i.qtd, 0), [itens])
-  const taxa = f.modo === 'entrega' ? bairro.taxa : 0
-  const total = subtotal + taxa
-  const faltaMinimo = f.modo === 'entrega' && subtotal < LOJA.pedidoMinimoEntrega
+  // So retirada no balcao: o total e o proprio subtotal, sem taxa.
+  const total = useMemo(() => itens.reduce((s, i) => s + i.preco * i.qtd, 0), [itens])
 
   if (ultimoPedido) {
     return (
@@ -57,8 +49,6 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
     if (itens.length === 0) return 'Escolha ao menos um item da vitrine.'
     if (f.nome.trim().length < 3) return 'Escreva seu nome completo.'
     if (somenteDigitos(f.telefone).length < 10) return 'Confira o telefone, com DDD.'
-    if (f.modo === 'entrega' && f.endereco.trim().length < 6) return 'Escreva a rua e o número.'
-    if (faltaMinimo) return `Pedido mínimo para entrega: ${brl(LOJA.pedidoMinimoEntrega)}.`
     return ''
   }
 
@@ -74,18 +64,8 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
       criado_em: new Date().toISOString(),
       cliente: { nome: f.nome.trim(), telefone: f.telefone.trim() },
       itens: itens.map(({ id, nome, opcao, preco, qtd }) => ({ id, nome, opcao, preco, qtd })),
-      entrega:
-        f.modo === 'entrega'
-          ? {
-              modo: 'entrega',
-              bairro: bairro.nome,
-              prazo: bairro.prazo,
-              endereco: f.endereco.trim(),
-              complemento: f.complemento.trim(),
-              referencia: f.referencia.trim()
-            }
-          : { modo: 'retirada', prazo: RETIRADA.prazo },
-      totais: { subtotal, taxa, total, sinal: 0 },
+      entrega: { modo: 'retirada', prazo: RETIRADA.prazo },
+      totais: { subtotal: total, taxa: 0, total, sinal: 0 },
       pagamento: { forma: 'Pix' },
       encomenda: null,
       observacoes: f.observacoes.trim()
@@ -144,12 +124,8 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
 
           <div className="totais">
             <div>
-              <span>Subtotal</span>
-              <span>{brl(subtotal)}</span>
-            </div>
-            <div>
-              <span>{f.modo === 'entrega' ? `Entrega ${bairro.nome}` : 'Retirada na loja'}</span>
-              <span>{brl(taxa)}</span>
+              <span>Retirada na loja</span>
+              <span>{RETIRADA.prazo}</span>
             </div>
             <div className="total">
               <span>Total</span>
@@ -159,14 +135,9 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
         </>
       )}
 
-      <div className="modos">
-        <button className="modo" data-ativo={f.modo === 'entrega'} onClick={() => setF({ ...f, modo: 'entrega' })}>
-          Entrega
-        </button>
-        <button className="modo" data-ativo={f.modo === 'retirada'} onClick={() => setF({ ...f, modo: 'retirada' })}>
-          Retirar na loja
-        </button>
-      </div>
+      <p className="aviso">
+        Pedido para <strong>retirada na loja</strong>, em {LOJA.endereco}.
+      </p>
 
       <label className="campo">
         <span>Nome</span>
@@ -177,35 +148,6 @@ export default function Comanda({ itens, onQtd, onLimpar, onEnviar, enviando, ul
         <span>WhatsApp com DDD</span>
         <input value={f.telefone} onChange={set('telefone')} placeholder="(19) 99999-9999" inputMode="tel" />
       </label>
-
-      {f.modo === 'entrega' && (
-        <>
-          <label className="campo">
-            <span>Bairro</span>
-            <select value={f.bairroId} onChange={set('bairroId')}>
-              {BAIRROS.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.nome}, {brl(b.taxa)}, {b.prazo}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="campo">
-            <span>Rua e número</span>
-            <input value={f.endereco} onChange={set('endereco')} placeholder="Rua Conceição, 942" />
-          </label>
-          <div className="dupla">
-            <label className="campo">
-              <span>Complemento</span>
-              <input value={f.complemento} onChange={set('complemento')} placeholder="Apto 21" />
-            </label>
-            <label className="campo">
-              <span>Referência</span>
-              <input value={f.referencia} onChange={set('referencia')} placeholder="Portão verde" />
-            </label>
-          </div>
-        </>
-      )}
 
       <label className="campo">
         <span>Observações</span>
