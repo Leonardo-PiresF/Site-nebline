@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Foto from './Foto.jsx'
+import { DESENHOS } from '../data/desenhos.js'
 import { fotoDe, temFotoReal } from '../data/fotos.js'
 import { brl } from '../lib/formato.js'
 
@@ -68,6 +69,7 @@ export default function Vitrine({ categoria, produtos, indisponiveis, onAdiciona
   return (
     <section className="secao">
       <div className="secao-cabeca">
+        <img className="desenho ornamento" src={DESENHOS.gomo} alt="" aria-hidden="true" />
         <h2 className="secao-titulo">{categoria.nome}</h2>
         <span className="rotulo">{categoria.linha}</span>
       </div>

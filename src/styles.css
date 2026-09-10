@@ -421,6 +421,77 @@ a { color: inherit; }
   margin-top: 12px;
 }
 
+/* ---------------- Desenhos ---------------- */
+
+/* Traços dos cardapios impressos. Sao decoracao: entram atras do texto,
+   nunca na frente, e o multiply apaga o miolo branco dos limoes contra o
+   papel, deixando so o risco. */
+.desenho {
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  mix-blend-mode: multiply;
+}
+
+/* Ramo no vao da direita de "Onde estamos", que no desktop fica vazio. Ele
+   fica preso a altura da propria linha do endereco: assim nao encosta na
+   regua do titulo la em cima nem entra embaixo da faixa de horarios, que tem
+   fundo solido e o cortaria pela metade. */
+.endereco-linha { position: relative; }
+.desenho-endereco {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  object-position: bottom right;
+  opacity: 0.5;
+  z-index: 0;
+}
+/* O endereco passa na frente do ramo. */
+.endereco-grande { position: relative; z-index: 1; }
+
+/* Cercadura: fileira de limoes que sangra pela borda da faixa, como a capa
+   do cardapio de bolos. A faixa corta as pecas de proposito. */
+.cercadura {
+  /* Uma escala so comanda a faixa inteira: largura das pecas, quanto elas
+     sobem e a altura da tira. No celular ela cai, para caber mais ramo. */
+  --escala-cerca: 1;
+  height: calc(148px * var(--escala-cerca));
+  overflow: hidden;
+  position: relative;
+  pointer-events: none;
+}
+.cercadura-fila {
+  display: flex;
+  justify-content: center;
+  /* Os ramos se tocam de leve e a fila sangra pelas laterais, como na capa. */
+  gap: 0;
+  margin: 0 calc(-46px * var(--escala-cerca));
+}
+.cercadura-peca { flex: none; opacity: 0.92; }
+
+/* Gomo de limao antes do titulo da categoria, do tamanho da maiuscula. */
+.ornamento { width: 26px; align-self: center; opacity: 0.85; }
+
+/* As pecas encostam no alto e sao cortadas pela borda da faixa. */
+.cercadura-fila { align-items: flex-start; }
+/* A faixa do pe e a mesma, virada de cabeca para baixo. */
+.cercadura-base { transform: scaleY(-1); }
+
+/* Encomendas: o menino com o bolo acompanha o texto de abertura. */
+.abertura-enc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 168px;
+  gap: 24px;
+  align-items: center;
+  margin: 14px 0 22px;
+}
+.abertura-enc .item-desc { max-width: 62ch; margin: 0; }
+.desenho-menino { width: 100%; opacity: 0.62; }
+
 /* ---------------- Encomendas ---------------- */
 
 .encomendas { display: grid; gap: 18px; }
@@ -432,6 +503,26 @@ a { color: inherit; }
 }
 
 .cartao-enc h3 { font-family: var(--display); font-size: 24px; margin: 0 0 4px; font-weight: 500; }
+
+/* Exemplos de bolo festivo: rolam de lado, para nao empurrar os tamanhos
+   para fora da primeira tela no celular. */
+.galeria-bolos {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.foto-bolo {
+  width: 116px;
+  flex: none;
+  aspect-ratio: 3 / 4;
+  border-radius: 3px;
+  scroll-snap-align: start;
+}
+.foto-bolo.foto-vazia { aspect-ratio: 3 / 4; }
 
 .tamanhos { display: grid; gap: 8px; margin-top: 14px; }
 .tamanho {
@@ -665,6 +756,7 @@ a { color: inherit; }
   html { -webkit-text-size-adjust: 100%; }
   body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; }
 
+  .cercadura { --escala-cerca: 0.62; }
   .palco { padding: 18px 18px calc(96px + env(safe-area-inset-bottom)); }
   .itens { grid-template-columns: 1fr; }
   .pilares { grid-template-columns: 1fr; gap: 22px; }
@@ -719,6 +811,10 @@ a { color: inherit; }
   .botao { padding: 16px; border-radius: 10px; }
   .tamanho { padding: 14px; border-radius: 10px; }
   .cartao-enc { border-radius: 12px; padding: 18px 16px; }
+  .desenho-endereco { max-width: 108px; opacity: 0.4; }
+  .abertura-enc { grid-template-columns: 1fr; gap: 12px; justify-items: center; }
+  .desenho-menino { width: 150px; }
+  .foto-bolo { width: 104px; border-radius: 10px; }
 
   .rodape { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 
@@ -748,6 +844,10 @@ a { color: inherit; }
   .barra-app button[data-ativa='true'] { color: var(--tinta); }
   .barra-icone { position: relative; display: block; line-height: 0; }
   .barra-nome { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+}
+
+@media (max-width: 560px) {
+  .cercadura { --escala-cerca: 0.5; }
 }
 
 @media (max-width: 400px) {

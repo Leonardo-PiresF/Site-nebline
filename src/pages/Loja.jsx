@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import Cabecalho from '../components/Cabecalho.jsx'
+import Cercadura from '../components/Cercadura.jsx'
 import BarraApp from '../components/BarraApp.jsx'
 import Vitrine from '../components/Vitrine.jsx'
 import Comanda from '../components/Comanda.jsx'
@@ -98,6 +99,8 @@ export default function Loja() {
         total={total}
       />
 
+      <Cercadura lado="topo" />
+
       <main className="palco">
         <div className="conteudo">
           {secao === 'home' && (
@@ -139,6 +142,8 @@ export default function Loja() {
           )}
         </div>
       </main>
+
+      <Cercadura lado="base" />
 
       <BarraApp secao={secao} onIr={irPara} qtd={qtdTotal} total={total} />
 

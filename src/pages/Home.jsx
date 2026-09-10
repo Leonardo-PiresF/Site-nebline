@@ -1,6 +1,7 @@
 import Foto from '../components/Foto.jsx'
 import { PRODUTOS } from '../data/catalogo.js'
-import { fotoDe, fotoHero, fotoSobre } from '../data/fotos.js'
+import { DESENHOS } from '../data/desenhos.js'
+import { fotoDe, fotoHero } from '../data/fotos.js'
 import { LOJA } from '../lib/config.js'
 import { brl } from '../lib/formato.js'
 
@@ -91,42 +92,14 @@ export default function Home({ onVerCardapio, onEncomendar }) {
         </button>
       </section>
 
-      <section className="secao sobre">
-        <figure className="sobre-foto">
-          <Foto src={fotoSobre()} alt="O deck coberto de jasmim da Nebline" inicial="N" />
-        </figure>
-
-        <div>
-          <div className="secao-cabeca">
-            <h2 className="secao-titulo">Sobre a Nebline</h2>
-            <span className="rotulo">Quem faz</span>
-          </div>
-
-          <p className="sobre-texto">
-            A Nebline nasceu em 2020, em uma casa de família no Cambuí, das mãos do chef Heeid
-            Albuquerque, formado em gastronomia e especializado em confeitaria na Le Cordon Bleu,
-            ao lado do sócio Michel Lebedka.
-          </p>
-          <p className="sobre-texto">
-            Em dezembro daquele mesmo ano, a torta Chocolatuda venceu o Que Seja Doce, do GNT, e o
-            Vasinho, um pavê belga com flores comestíveis, levou a prova técnica do programa. Os
-            dois continuam na vitrine, feitos do mesmo jeito, todos os dias.
-          </p>
-          <p className="sobre-texto">
-            O resto da casa cresceu em volta disso: croissant de fermentação natural, brunch no
-            deck de jasmim, café de máquina, massas no almoço e uma vitrine que muda conforme a
-            semana. Quem chega com restrição alimentar encontra opção em quase toda seção do
-            cardápio, e quem chega com cachorro encontra lugar no jardim.
-          </p>
-
-          <div className="pilares">
-            {PILARES.map((p) => (
-              <article className="pilar" key={p.titulo}>
-                <h3>{p.titulo}</h3>
-                <p>{p.texto}</p>
-              </article>
-            ))}
-          </div>
+      <section className="secao">
+        <div className="pilares">
+          {PILARES.map((p) => (
+            <article className="pilar" key={p.titulo}>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -135,7 +108,10 @@ export default function Home({ onVerCardapio, onEncomendar }) {
           <h2 className="secao-titulo">Onde estamos</h2>
           <span className="rotulo">Cambuí</span>
         </div>
-        <p className="endereco-grande">{LOJA.endereco}</p>
+        <div className="endereco-linha">
+          <p className="endereco-grande">{LOJA.endereco}</p>
+          <img className="desenho desenho-endereco" src={DESENHOS.ramoCurto} alt="" aria-hidden="true" />
+        </div>
         <div className="faixa-horarios">
           {LOJA.horarios.map(([dia, hora]) => (
             <div key={dia}>
@@ -163,6 +139,7 @@ export default function Home({ onVerCardapio, onEncomendar }) {
           </a>
         </div>
       </section>
+
     </div>
   )
 }

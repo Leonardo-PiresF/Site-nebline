@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react'
+import Foto from './Foto.jsx'
 import { ENCOMENDAS } from '../data/catalogo.js'
+import { DESENHOS } from '../data/desenhos.js'
+import { BOLOS_FESTIVOS } from '../data/fotos.js'
 import { RETIRADA } from '../data/entrega.js'
 import { REGRAS_ENCOMENDA, LOJA } from '../lib/config.js'
 import { brl, gerarCodigo, somenteDigitos } from '../lib/formato.js'
@@ -121,11 +124,14 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
         <span className="rotulo">Bolos festivos, tortas inteiras e kits</span>
       </div>
 
-      <p className="item-desc" style={{ maxWidth: '62ch', margin: '14px 0 22px' }}>
-        Encomenda funciona por agenda, não por estoque. Você escolhe o que quer e a data, a Nebline
-        confere se cabe na produção daquele dia e confirma pelo WhatsApp. A data fica reservada
-        quando o sinal de {REGRAS_ENCOMENDA.percentualSinal}% é pago em Pix.
-      </p>
+      <div className="abertura-enc">
+        <p className="item-desc">
+          Encomenda funciona por agenda, não por estoque. Você escolhe o que quer e a data, a
+          Nebline confere se cabe na produção daquele dia e confirma pelo WhatsApp. A data fica
+          reservada quando o sinal de {REGRAS_ENCOMENDA.percentualSinal}% é pago em Pix.
+        </p>
+        <img className="desenho desenho-menino" src={DESENHOS.meninoBolo} alt="" aria-hidden="true" />
+      </div>
 
       <div className="encomendas">
         {ENCOMENDAS.map((e) => (
@@ -135,6 +141,20 @@ export default function Encomendas({ onEnviar, enviando, ultimoPedido, onNovoPed
             <p className="rotulo" style={{ marginTop: 10 }}>
               Antecedência mínima de {REGRAS_ENCOMENDA.antecedenciaHoras[e.tipo]} horas
             </p>
+
+            {e.tipo === 'bolo_festivo' && (
+              <div className="galeria-bolos">
+                {BOLOS_FESTIVOS.map((foto, i) => (
+                  <Foto
+                    key={foto}
+                    className="foto-bolo"
+                    src={foto}
+                    alt={`Bolo festivo confeitado pela Nebline, exemplo ${i + 1}`}
+                    inicial="N"
+                  />
+                ))}
+              </div>
+            )}
             <div className="tamanhos">
               {e.tamanhos.map((t) => (
                 <button

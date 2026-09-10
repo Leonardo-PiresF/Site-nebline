@@ -1,20 +1,4 @@
-// ---------------------------------------------------------------
-// FOTOS
-// ---------------------------------------------------------------
-// Este arquivo existe para que a troca por fotos reais da Nebline seja
-// feita em um lugar so.
-//
-// FOTOS_REAIS liga o id do produto (src/data/catalogo.js) ao arquivo em
-// public/fotos/. Item listado aqui usa a foto da casa; o que ainda nao tem
-// foto aparece sem foto, com a placa da inicial no lugar.
-//
-// COMO ADICIONAR UMA FOTO NOVA:
-// 1. coloque o arquivo em public/fotos/ (nome sem acento e sem espaco, para
-//    nao dar problema de url na hospedagem)
-// 2. acrescente a linha aqui, com o id do produto
-//
-// O hero e a foto da secao "sobre" tambem sao da cliente e ficam no fim
-// deste arquivo.
+
 
 export const FOTOS_REAIS = {
   // Tortas
@@ -47,8 +31,12 @@ export const FOTOS_REAIS = {
   'doc-vasinho': '/fotos/vasinho.jpeg',
   'doc-salada-frutas': '/fotos/salada-de-frutas.jpeg',
   'doc-salada-frutas-sorvete': '/fotos/salada-de-frutas-com-sorvete.jpeg',
+  // A mesma taca serve o sorvete de uma e o de duas bolas.
+  'doc-sorvete-1': '/fotos/sorvete.jpeg',
+  'doc-sorvete-2': '/fotos/sorvete.jpeg',
 
   // Salgados
+  'sal-pao-queijo': '/fotos/pao-de-queijo.jpeg',
   'sal-quiche': '/fotos/quiche-frango.jpeg',
   'sal-empanada': '/fotos/empanada.jpeg',
   'sal-croissant-ganache': '/fotos/croissant-chocolate.jpeg',
@@ -56,22 +44,32 @@ export const FOTOS_REAIS = {
   'sal-croissant-amendoas': '/fotos/croissant-amendoas.jpeg',
   'sal-croissant-morango-dl': '/fotos/croissant-morango-doce-de-leite.jpeg',
   'sal-croissant-morango-patissier': '/fotos/croissant-morango-patissier.jpeg',
+  // O mesmo prato de toast serve o de leite, o integral e o vegano: muda o
+  // pao, nao a apresentacao.
   'sal-toast-leite': '/fotos/toast.jpeg',
+  'sal-toast-integral': '/fotos/toast.jpeg',
+  'sal-toast-vegano': '/fotos/toast.jpeg',
   'sal-toast-lowcarb': '/fotos/toast-low-carb.jpeg',
   'sal-brusch-parma': '/fotos/bruschetta-parma-brie.jpeg',
   'sal-brusch-cogumelos': '/fotos/bruschetta-cogumelos.jpeg',
   'sal-brusch-caprese': '/fotos/bruschetta-caprese.jpeg',
+  'sal-brusch-parmesao': '/fotos/bruschetta-parmesao.jpeg',
 
   // Pratos
   'pra-salada-nebline': '/fotos/salada-nebline.jpeg',
+  // O prato com salada sai na foto da propria fatia de quiche.
+  'pra-quiche-salada': '/fotos/quiche-frango.jpeg',
   'pra-lanchinho': '/fotos/lanchinho-frango-cream-cheese.jpeg',
   'pra-massa-fiore': '/fotos/raviolone-camarao-catupiry.jpeg',
   'pra-massa-nebline': '/fotos/massa-nebline.jpeg',
   'pra-omelete': '/fotos/omelete-toast.jpeg',
   'pra-massa-carne-seca': '/fotos/massa-carne-seca-abobora.jpeg',
   'pra-massa-bufala': '/fotos/massa-mucarela-bufala.jpeg',
+  'pra-massa-frango': '/fotos/massa-frango-catupiry.jpeg',
   'pra-cafe-manha': '/fotos/cafe-da-manha.jpeg',
   'pra-ovos': '/fotos/ovos-mexidos.jpeg',
+  'pra-ovos-frios': '/fotos/ovos-mexidos-com-frios.jpeg',
+  'pra-iogurte': '/fotos/iogurte.jpeg',
 
   // Cafeteria
   // A mesma xicara de expresso serve o expresso, o duplo, o descafeinado e o drip.
@@ -79,6 +77,14 @@ export const FOTOS_REAIS = {
   'caf-expresso-duplo': '/fotos/cafe-expresso.jpeg',
   'caf-descafeinado': '/fotos/cafe-expresso.jpeg',
   'caf-drip': '/fotos/cafe-expresso.jpeg',
+  // A mesma xicara serve o cafe com leite e a versao com leite de amendoas.
+  'caf-com-leite': '/fotos/cafe-com-leite.jpeg',
+  'caf-amendoas': '/fotos/cafe-com-leite.jpeg',
+  // A taca do frape serve tambem os dois cafes gelados. Nao ha foto do cafe
+  // gelado puro, e a do capuccino gelado traz o nome dele escrito na imagem.
+  'caf-frape': '/fotos/frape.jpeg',
+  'caf-cafe-gelado': '/fotos/frape.jpeg',
+  'caf-gelado-amendoas': '/fotos/frape.jpeg',
   // O macchiato e o macchiato duplo saem na mesma xicara.
   'caf-macchiato': '/fotos/macchiato.jpeg',
   'caf-macchiato-duplo': '/fotos/macchiato.jpeg',
@@ -131,22 +137,34 @@ export const FOTOS_REAIS = {
 // - macaron-pistache.jpeg
 // - macaron-sortido.jpeg
 // - cafe-da-manha-2.jpeg ......... segundo angulo
-// - massa-carne-seca-abobora-2.jpeg
-// - massa-carne-seca-com-abobora.jpeg  terceiro angulo
+// - massa-carne-seca-abobora-2.jpeg  segundo angulo
 // - massa-fiore-2.jpeg ........... segundo angulo do raviolone
 // - salada-nebline-2.jpeg
 // - torta-choco-chocolate-2.jpeg
 // - torta-limao-siciliano.jpeg
 // - hero.png .................... hero antigo, trocado pela foto da fachada
+// - bolo-festivo-1 a 5.jpeg ...... bolos de aniversario confeitados, de encomenda
 //
-// Ainda faltam fotos de: Verrine vegana, Toast integral, Toast vegano,
-// Bruschetta de parmesao, Quiche com salada, Massa de frango com catupiry,
-// Iogurte, Ovos mexidos com frios, parte da cafeteria (cafe com leite, leite
-// de amendoas, cafes gelados, frape), o suco detox, os smoothies, os sorvetes
-// e o pao de queijo.
+// Ainda faltam fotos de: Verrine vegana, suco detox e os dois smoothies.
+//
+// Alguns itens saem na foto de um parente proximo, como ja acontecia com o
+// expresso e os capuccinos: o toast integral e o vegano usam o toast ao
+// leite, a quiche com salada usa a fatia de quiche, o cafe com leite de
+// amendoas usa o cafe com leite e os dois cafes gelados usam o frape.
 
 // Um produto ja tem foto da casa?
 export const temFotoReal = (produtoId) => Boolean(FOTOS_REAIS[produtoId])
+
+// Bolos festivos ja entregues, mostrados como exemplo de decoracao no
+// cartao de encomenda. Nao sao itens de cardapio: cada bolo e feito sob
+// medida, entao a galeria serve so para dar ideia do acabamento.
+export const BOLOS_FESTIVOS = [
+  '/fotos/bolo-festivo-1.jpeg',
+  '/fotos/bolo-festivo-2.jpeg',
+  '/fotos/bolo-festivo-3.jpeg',
+  '/fotos/bolo-festivo-4.jpeg',
+  '/fotos/bolo-festivo-5.jpeg'
+]
 
 // Fotos enviadas pela cliente
 export const HERO = '/fotos/fachada-nebline.jpeg'
