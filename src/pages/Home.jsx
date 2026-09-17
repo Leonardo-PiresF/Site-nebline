@@ -22,24 +22,24 @@ const QUERIDINHOS = DESTAQUES.map((d) => {
 
 const PILARES = [
   {
-    titulo: 'Mais do que uma loja, uma casa',
+    titulo: 'Acolhedor e encantador',
     texto:
-      'Nossa casa fica no Cambuí, com deck coberto. Cachorro é bem-vindo no jardim. Estacionamento com serviço de manobrista.'
+      'Um ambiente acolhedor e encantador, com espaço pet para você aproveitar ao lado de quem ama.'
   },
   {
-    titulo: 'Feito à mão, todo dia',
+    titulo: 'Feito com carinho',
     texto:
-      'Massa de fermentação natural, ganache belga, doce de leite caseiro. O bolo do dia e a verrine mudam conforme o que está bom na semana.'
+      'Aqui você encontra doces artesanais feitos com carinho, além de deliciosas opções vegetarianas e veganas.'
   },
   {
-    titulo: 'Cardápio para todo mundo',
+    titulo: 'Espaço para comemorar',
     texto:
-      'Há opções veganas, sem lactose, sem glúten e zero açúcar em quase todas as seções, marcadas item por item.'
+      'Para tornar suas comemorações ainda mais especiais, temos o espaço perfeito para aniversários, encontros, confraternizações e eventos.'
   },
   {
-    titulo: 'Encomenda com data marcada',
+    titulo: 'Tortas e bolos sob encomenda',
     texto:
-      'Bolo festivo, torta inteira e caixa de presente saem por agenda, com sinal de 50% para reservar o lugar na bancada.'
+      'Faça seu pedido pelo nosso WhatsApp e deixe a Nebline fazer parte do seu momento.'
   }
 ]
 
@@ -50,13 +50,9 @@ export default function Home({ onVerCardapio, onEncomendar }) {
         <div className="hero-texto-col">
           <p className="rotulo">Cambuí, Campinas, desde 2020</p>
           <h2 className="hero-frase">
-            A torta que ganhou o <em>Que Seja Doce</em> está a alguns quarteirões de você.
+            Na Nebline, cada momento merece ser <em>especial</em>.
           </h2>
-          <p className="hero-linha">
-            Doces feitos à mão, café, brunch e encomendas com data marcada. Monte seu pedido por
-            aqui, finalize no WhatsApp e retire na loja, sem baixar aplicativo e sem taxa de
-            plataforma.
-          </p>
+          <p className="hero-linha">Vem ter uma doce experiência conosco.</p>
           <div className="hero-acoes">
             <button className="botao" onClick={onVerCardapio}>
               Ver o cardápio
